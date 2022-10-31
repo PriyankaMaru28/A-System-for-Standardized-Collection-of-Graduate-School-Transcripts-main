@@ -1,0 +1,14 @@
+
+-Admin Tasks Done
+-Register page Done
+- Adding tool tips to each field
+
+.......
+-Export csv -  completed
+-Authentication - completed
+...........
+Further developments
+-Validation of the forms
+-Multiple transcripts, multple degrees, multiple work exp
+- Extending to other Faculties, grading schemes
+https://online.mun.ca/d2l/home/348529

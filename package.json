@@ -1,0 +1,24 @@
+{
+  "name": "evaluation",
+  "version": "1.0.0",
+  "scripts": {
+    "server": "cd backend && nodemon ./bin/www",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "jwt-simple": "^0.5.6",
+    "lodash": "^4.17.21",
+    "nodemailer-smtp-transport": "^2.7.4",
+    "nodemon": "^2.0.6",
+    "npm-install-all": "^1.1.21",
+    "react-google-recaptcha": "^2.1.0",
+    "react-step-progress-bar": "^1.0.3",
+    "simple-jwt": "^1.0.3"
+  },
+  "devDependencies": {
+    "concurrently": "^4.0.1"
+  }
+}

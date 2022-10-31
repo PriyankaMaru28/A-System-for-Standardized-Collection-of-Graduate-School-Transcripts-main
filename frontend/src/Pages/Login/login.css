@@ -1,0 +1,26 @@
+
+
+
+.midDiv{
+  border-radius: 25px;
+  border-color: wheat;
+  border-width: thin;
+  margin: auto;
+  width: 30%;
+  padding : 20px;
+  background-color:white;
+}
+
+
+
+.backgroundimg {
+  height: 100%;
+  width: auto;
+  background-image:url('../../images/munPic.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+input.form-control {
+  font-size: 14px;
+}
+

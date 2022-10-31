@@ -1,0 +1,100 @@
+@import "~antd/dist/antd.css";
+/* HTML Elements */
+html,
+body,
+.App,
+#root,
+.h100 {
+  height: 100%;
+}
+body {
+  font-family: "Rubik", sans-serif !important;
+  background: #fafafa;
+  color: rgb(0, 0, 0);
+}
+
+.borderShadow{
+  -webkit-box-shadow: 0 4px 6px -6px #222;
+  -moz-box-shadow: 0 4px 6px -6px #222;
+  box-shadow: 0 4px 6px -6px #222;
+  padding: 20px;border-radius: 20px;
+}
+
+.prevbtn{
+  position: absolute;
+  top: 300px;
+  left: 40px
+}
+
+.nextbtn{
+  position: absolute;
+  top: 300px;
+  right: 40px
+}
+
+.profileData{
+  border-radius: 25px;
+  border-style: solid;
+  border-color: black;
+  border-width: thin;
+}
+
+.errorMsg{
+  color:red
+}
+
+.heading{
+  text-align: center;
+  margin: auto;
+}
+
+.sideHeading{
+  font-style: italic;
+  font-size: 14px;
+  color: rgb(24, 80, 202)
+}
+
+.dataHeading{
+  font-weight: bold;
+  font-size: 13px;
+  color: #778ca2;
+}
+
+.data{
+  font-weight: normal;
+  font-size: 14px;
+}
+
+.studDiv{
+  border-radius: 25px;
+  border-color: wheat;
+  border-width: thin;
+  margin: auto;
+  width: 80%;
+  padding : 20px;
+  background-color:white;
+}
+
+.text30 {
+  font-size: 10px;
+}
+
+
+.hideOverflow{
+  overflow-y: hidden; 
+}
+
+.center {
+  margin: auto;
+}
+
+.wrapper{
+  display: flex;
+}
+
+.nav-container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
