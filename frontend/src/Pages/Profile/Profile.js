@@ -1,11 +1,13 @@
 import React from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { Table, Tag, Space } from 'antd';
+import { Table, Tag, Space, Button } from 'antd';
 import {CloudDownloadOutlined,ToolOutlined} from '@ant-design/icons';
 import AppLayout from  '../../AppLayout';
 import '../../App.css'
-import {Dropdown,DropdownButton} from 'react-bootstrap';
+import {Container,Dropdown,DropdownButton} from 'react-bootstrap';
+import moment from "moment";
+
 
 const columns = [
   {
@@ -61,7 +63,7 @@ class Profile extends React.Component {
       let  newDetails= {
         workExpDetails: {  
           workField: workData.field, role:workData.role, monthsOfExp: workData.monthsofExperince, companyName: workData.company,
-          description: workData.description, workStart : workData.startDate ,workEnd:workData.startDate },
+          description: workData.description, workStart : workData.startDate ,workEnd:workData.endDate },
         transcriptDetails : {country:transData.country, uniName: transData.universityName, gradeType: transData.gradeType,
                   averageGrade : transData.averageGrade, academicStanding: transData.academicStanding,
                 averageClassGrade:transData.averageClassGrade, courses: transData.courses },
@@ -70,7 +72,7 @@ class Profile extends React.Component {
             degreeStart:degreeData.startDate,degreeEnd:degreeData.endDate , overallGrade:degreeData.overallGrade},
         programDetails:{program:programData.program,dept:programData.dept,route:programData.route,intake:programData.intakeYear, term: programData.intakeTerm,
                         overall:programData.overall,analytical:programData.analytical,quantitative:programData.quantitative,verbalReasoning:programData.verbalReasoning,
-                        ept:programData.ept,eptOverall:programData.eptOverall,eptSpeaking:programData.eptSpeaking,eptWriting:programData.eptWriting,eptListening:programData.eptListening,eptReading:programData.eptReading}
+                        ept:programData.EPTName,eptOverall:programData.eptOverall,eptSpeaking:programData.eptSpeaking,eptWriting:programData.eptWriting,eptListening:programData.eptListening,eptReading:programData.eptReading}
       }
      this.setState({appDetails : newDetails });
     })     
@@ -83,15 +85,15 @@ class Profile extends React.Component {
       return(
           <div>
               <AppLayout>
-                <div style={{display:'flex'}}>
-                  <div style ={{float : 'left',width:'20%'}}>
+              <div style ={{float : 'center',width:'100%'}}>
                     <img style = {{ height:'100px'}} src ={require('../../images/icons/account-profile.png').default}></img>
                   <div >
                     Name: {user.fname} {user.lname}<br/>
                     Email: {user.email}
                   </div>
                   </div>
-                  <div  style= {{width :'70%'}}>
+               
+                  <div  style= {{width :'100%'}}>
                    { (app != {} && user.role == 'student') &&
                     <>
                    <h3 style = {{'text-align': 'center'}}> Application Details </h3>
@@ -106,7 +108,9 @@ class Profile extends React.Component {
                           <span className = 'dataHeading'>Intake Year:</span> <span className = 'data'>{app.programDetails.intake}</span>&nbsp; &nbsp;
                           <span className = 'dataHeading'>Intake Term:</span> <span className = 'data'>{app.programDetails.term}</span>
                           <br/><br/>
-                           </p><p>
+                           </p>
+                        {app.programDetails.overall && app.programDetails.verbalReasoning && app.programDetails.quantitative &&  app.programDetails.analytical && 
+                        <p>
                         <h6 className ='sideHeading'>Gre Scores:</h6>
                         
                           <span className = 'dataHeading'>Overall:</span> <span className = 'data'>{app.programDetails.overall}</span>&nbsp; &nbsp;
@@ -114,7 +118,9 @@ class Profile extends React.Component {
                           <span className = 'dataHeading'>Quantitative Reasoning:</span> <span className = 'data'>{app.programDetails.quantitative}</span>&nbsp; &nbsp;
                           <span className = 'dataHeading'>Analytical Writing:</span> <span className = 'data'>{app.programDetails.analytical}</span>
                          
-                          </p><p>
+                        </p>
+                        }
+                        <p>
                         <h6 className ='sideHeading'>{app.programDetails.ept} Scores:</h6>
                         
                           <span className = 'dataHeading'>Overall:</span> <span className = 'data'>{app.programDetails.eptOverall}</span>&nbsp; &nbsp;
@@ -122,36 +128,34 @@ class Profile extends React.Component {
                           <span className = 'dataHeading'>Speaking:</span> <span className = 'data'>{app.programDetails.eptSpeaking}</span>&nbsp; &nbsp;
                           <span className = 'dataHeading'>Reading:</span> <span className = 'data'>{app.programDetails.eptReading}</span>
                           <span className = 'dataHeading'>Writing:</span> <span className = 'data'>{app.programDetails.eptWriting}</span>
-                         
-   
-                        
+                 
                         </p> 
                    </div>
                    <div className = 'borderShadow'>
                     <h5 className = 'heading'>University Details</h5>
                     <br/>
                     <p>
-                          <span className = 'dataHeading'>University Name:</span> <span className = 'data'>{app.degreeDetails.uniName}</span>&nbsp; &nbsp; 
-                          <span className = 'dataHeading'>Country:</span> <span className = 'data'>{app.degreeDetails.country}</span>&nbsp; &nbsp;
+                          <span className = 'dataHeading'>University Name:</span> <span className = 'data'>{app.degreeDetails.uniName}&nbsp; &nbsp; </span>
+                          <span className = 'dataHeading'>Country:</span> <span className = 'data'>{app.degreeDetails.country}&nbsp; &nbsp;</span>
                           <br/>
-                          <span className = 'dataHeading'>Degree:</span> <span className = 'data'>{app.degreeDetails.degreeLevel}</span>&nbsp; &nbsp; 
-                          <span className = 'dataHeading'>Program:</span> <span className = 'data'>{app.degreeDetails.program}</span>&nbsp; &nbsp;
-                          <span className = 'dataHeading'>From:</span> <span className = 'data'>{app.degreeDetails.degreeStart}</span>&nbsp; &nbsp;
-                          <span className = 'dataHeading'>To:</span> <span className = 'data'>{app.degreeDetails.degreeEnd}</span>&nbsp; &nbsp;
+                          <span className = 'dataHeading'>Degree:</span> <span className = 'data'>{app.degreeDetails.degreeLevel}&nbsp; &nbsp;</span> 
+                          <span className = 'dataHeading'>Program:</span> <span className = 'data'>{app.degreeDetails.program}&nbsp; &nbsp;</span>
+                          <span className = 'dataHeading'>From:</span> <span className = 'data'>{moment(app.degreeDetails.degreeStart).utc().format('YYYY-MM-DD')}&nbsp; &nbsp;</span>
+                          <span className = 'dataHeading'>To:</span> <span className = 'data'>{moment(app.degreeDetails.degreeEnd).utc().format('YYYY-MM-DD')}&nbsp; &nbsp;</span>
                          
                           <br/>
-                        </p><p>
+                    </p>
+                      <p>
                         <h6 className ='sideHeading'>Universiy Rankings</h6>
-                        
-                          <span className = 'dataHeading'>UniRank World Ranking:</span> <span className = 'data'>{app.degreeDetails.uniRankWorld}</span>&nbsp; &nbsp;
-                          <span className = 'dataHeading'>UniRank Country Ranking:</span> <span className = 'data'>{app.degreeDetails.uniRankCountry}</span>&nbsp; &nbsp;
-                          <span className = 'dataHeading'>Link:</span> <span className = 'data'>{app.degreeDetails.uniRankLink}</span>
+                        {app.degreeDetails.uniRankWorld &&<><span className = 'dataHeading'>UniRank World Ranking:</span> <span className = 'data'>{app.degreeDetails.uniRankWorld}</span>&nbsp; &nbsp;</>}
+                        {app.degreeDetails.uniRankCountry && <><span className = 'dataHeading'>UniRank Country Ranking:</span> <span className = 'data'>{app.degreeDetails.uniRankCountry}</span>&nbsp; &nbsp;</>}
+                        {app.degreeDetails.uniRankLink && <><span className = 'dataHeading'>Link:</span> <span className = 'data'>{app.degreeDetails.uniRankLink}</span></>}
+                          <br/> 
+                          {app.degreeDetails.otherRankWorld &&  <><span className = 'dataHeading'>Webometrics / Other World Ranking:</span> <span className = 'data'>{app.degreeDetails.otherRankWorld}</span>&nbsp; &nbsp;</>}
+                          {app.degreeDetails.otherRankCountry && <><span className = 'dataHeading'>Webometrics / Other Country Ranking:</span> <span className = 'data'>{app.degreeDetails.otherRankCountry}</span>&nbsp; &nbsp;</>}
+                          {app.degreeDetails.otherRankLink && <><span className = 'dataHeading'>Link:</span> <span className = 'data'>{app.degreeDetails.otherRankLink}</span></>}
                           <br/>
-                          <span className = 'dataHeading'>Webometrics / Other World Ranking:</span> <span className = 'data'>{app.degreeDetails.otherRankWorld}</span>&nbsp; &nbsp;
-                          <span className = 'dataHeading'>Webometrics / Other Country Ranking:</span> <span className = 'data'>{app.degreeDetails.otherRankCountry}</span>&nbsp; &nbsp;
-                          <span className = 'dataHeading'>Link:</span> <span className = 'data'>{app.degreeDetails.otherRankLink}</span>
-                          <br/>
-                          </p>
+                      </p>
                    </div>
                    <div className = 'borderShadow'>
                     <h5  className = 'heading' >Transcript Detials</h5>
@@ -161,29 +165,27 @@ class Profile extends React.Component {
                         <span className = 'dataHeading'>Country:</span> <span className = 'data'>{app.transcriptDetails.country}</span>&nbsp; &nbsp;
                         <span className = 'dataHeading'>Grading Scheme:</span> <span className = 'data'>{app.transcriptDetails.gradeType}</span>
                         <br/>
-                        <span className = 'dataHeading'>Average of all Grades:</span> <span className = 'data'>{app.transcriptDetails.averageGrade}</span>&nbsp; &nbsp;
+                        <span className = 'dataHeading'>Final Grade Average:</span> <span className = 'data'>{app.transcriptDetails.averageGrade}</span>&nbsp; &nbsp;
                         <span className = 'dataHeading'>Academic Standing:</span> <span className = 'data'>{app.transcriptDetails.academicStanding}</span>&nbsp; &nbsp;
-                        <span className = 'dataHeading'>Average Class Grade:</span> <span className = 'data'>{app.transcriptDetails.averageClassGrade}</span>
+                        <span className = 'dataHeading'>Final Grade Scale:</span> <span className = 'data'>{app.transcriptDetails.averageClassGrade}</span>
                         <br/>
                      </p>
                      <Table columns={columns} dataSource={app.transcriptDetails.courses}   /> 
                 
                    </div>
                    <div className = 'borderShadow'>
-                    <h5  className = 'heading' >Work Eperience</h5>
+                    <h5  className = 'heading' >Work Experience</h5>
                     <br/>
                     <p>
                         <span className = 'dataHeading'>Company Name:</span> <span className = 'data'>{app.workExpDetails.companyName}</span>&nbsp; &nbsp;
-                        <span className = 'dataHeading'>Feild:</span> <span className = 'data'>{app.workExpDetails.field}</span>&nbsp; &nbsp;
+                        <span className = 'dataHeading'>Field:</span> <span className = 'data'>{app.workExpDetails.field}</span>&nbsp; &nbsp;
                         <span className = 'dataHeading'>Role:</span> <span className = 'data'>{app.workExpDetails.role}</span>
                         <br/>
                         <span className = 'dataHeading'>Months of Experince:</span> <span className = 'data'>{app.workExpDetails.monthsOfExp}</span>&nbsp; &nbsp;
-                        <span className = 'dataHeading'>From:</span> <span className = 'data'>{app.workExpDetails.startDate}</span>&nbsp; &nbsp;
-                        <span className = 'dataHeading'>To:</span> <span className = 'data'>{app.workExpDetails.endDate}</span>
+                        <span className = 'dataHeading'>From:</span> <span className = 'data'>{app.workExpDetails.workStart}</span>&nbsp; &nbsp;
+                        <span className = 'dataHeading'>To:</span> <span className = 'data'>{app.workExpDetails.workEnd}</span>
                         <br/>
                         <span className = 'dataHeading'>Description:</span> <span className = 'data'>{app.workExpDetails.description}</span>
-                        
-                        <p></p>
                      </p>
                    </div>
                      
@@ -194,8 +196,8 @@ class Profile extends React.Component {
                     
                    </div>
                   </div>
-                  </div>
               </AppLayout>
+             
           </div>
       );
     }

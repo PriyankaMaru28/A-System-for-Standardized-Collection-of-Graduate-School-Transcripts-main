@@ -31,7 +31,7 @@ function AppLayout({children,header=''}){
       <NavDropdown title={ <UserOutlined />  }  id="basic-nav-dropdown" className="ml-auto" >
         <NavDropdown.Item ><Link to = '/profile'>Profile</Link></NavDropdown.Item>
         <NavDropdown.Item href="#action/3.2">Account Settings</NavDropdown.Item>
-        <NavDropdown.Item ><Link to = '/logout'>Signout </Link></NavDropdown.Item>
+        <NavDropdown.Item ><Link to = '/logout' onClick={()=>{sessionStorage.clear()}}>Signout </Link></NavDropdown.Item>
       </NavDropdown>
   </Navbar.Collapse>
 </Navbar>

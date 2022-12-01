@@ -46,12 +46,13 @@ router.get('/getAdminRequests',function(req,res){
   
 
 router.get('/getExcel',function(req,res){
+ 
     var scoresSql = 'select * from scores ORDER BY uid ASC';
     con.query(scoresSql, function(err,scoresList){
         if(err) throw err;
         let scoresArr =[]
         for(var i of scoresList){scoresArr.push(i)}
-    var coursesql = 'select uid, userName,courseID,courseName,coursedept, grade  from course ORDER BY uid ASC' ;
+    var coursesql = 'select courseID,courseName,coursedept,grade from course ORDER BY idcourse ASC' ;
     con.query(coursesql, function(err,coursesList){
         if(err) throw err;
         let coursesArr =[]
@@ -61,16 +62,16 @@ router.get('/getExcel',function(req,res){
     let worksheet1 = workbook.addWorksheet("scores"); //creating worksheet
     let worksheet2 = workbook.addWorksheet("courses"); //creating worksheet
     worksheet1.columns =  [
-        { label: "Applicant ID", key: "uid" },{ label: "Applicant Name", key: "userName" },{label:'Applicant Email', key: 'userEmail'},
+      { label: "User ID", key: "uid" },{ label: "Applicantion ID", key: "applicationid" },{ label: "Applicant Name", key: "userName" },{label:'Applicant Email', key: 'userEmail'},
         { label: "Numeric Score", key: "score1" }, { label: "Grade", key: "score2" },
-        { label: "Intake", key: "intake" }
+       { label: "Intake Term", key: "intakeTerm" } ,{ label: "Intake Year", key: "intakeYear" }
       ];
-      worksheet2.columns =  [{ label: "User ID", key: "uid" },{ label: "User Name", key: "userName" },
+      worksheet2.columns =  [{ label: "Applicantion ID", key: "uid" },{ label: "Applicant Name", key: "userName" },
                     { label: "Course ID", key: "courseID" },{ label: "Course Name", key: "courseName" },
                     { label: "Faculty", key: "coursedept" },{ label: "Course Grade", key: "grade" }
     ]
     // Add Array Rows
-    worksheet1.getRow(1).values = ['Applicant ID', 'Applicant Name', 'Applicant Email', 'Numeric Score',"Grade","Intake"];
+    worksheet1.getRow(1).values = ['User ID','Applicant ID', 'Applicant Name', 'Applicant Email', 'Numeric Score',"Grade","Intake Term","Intake Year"];
     worksheet1.addRows(scoresArr);
     worksheet2.getRow(1).values = ['Applicant ID', 'Applicant Name', 'Course ID', 'Course Name',"Faculty","Course Grade"];
     worksheet2.addRows(coursesArr);

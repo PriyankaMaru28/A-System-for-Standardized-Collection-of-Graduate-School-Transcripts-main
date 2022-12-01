@@ -32,6 +32,14 @@ body {
   right: 40px
 }
 
+.recaptchabtn{
+  position: absolute;
+  top: 300px;
+  right: 35px
+}
+
+
+
 .profileData{
   border-radius: 25px;
   border-style: solid;
