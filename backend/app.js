@@ -9,8 +9,6 @@ var usersRouter = require('./routes/users');
 var studentRouter = require('./routes/student');
 var cors = require('cors');
 
-
-
 var app = express();
 
 // view engine setup
@@ -27,11 +25,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/', indexRouter);
 app.use('/', usersRouter);
 app.use('/',studentRouter);
-
-
-
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
