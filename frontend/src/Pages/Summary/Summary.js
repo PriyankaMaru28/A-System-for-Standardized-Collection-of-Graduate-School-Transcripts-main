@@ -6,7 +6,6 @@ import '../../App.css'
 import { Container, Dropdown, DropdownButton } from 'react-bootstrap';
 import moment from "moment";
 import { ProgressBar } from "react-step-progress-bar";
-import ReCAPTCHA from "react-google-recaptcha";
 
 const columns = [
   {
@@ -69,16 +68,16 @@ class Summary extends React.Component {
   componentDidMount() {
     let session = JSON.parse(Cookies.get("session"))
     var user = session.user; var id;
-    console.log(user.id)
+   
     axios.defaults.headers.common["Authorization"] = JSON.parse(Cookies.get("session")).token;
     axios.get('/getSubmittedApplication/' + user.id).then((response) => {
-      console.log(response.data.appDetails)
+    
       let workData = response.data.appDetails.workExp, transData = response.data.appDetails.transcript;
       let degreeData = response.data.appDetails.degree, programData = response.data.appDetails.program;
       let newDetails = {
         workExpDetails: {
           workField: workData.field, role: workData.role, monthsOfExp: workData.monthsofExperince, companyName: workData.company,
-          description: workData.description, workStart: workData.startDate, workEnd: workData.startDate
+          description: workData.description, workStart: workData.startDate, workEnd: workData.endDate
         },
         transcriptDetails: {
           country: transData.country, uniName: transData.universityName, gradeType: transData.gradeType,
@@ -113,32 +112,6 @@ class Summary extends React.Component {
     message.success('Processing complete!');
 
   }
-
-  recaptcha_fun = async () => {
-    alert(`google recaptcha clicked ${this.captchaToken.current.getValue()}`)
-    const captchaToken = this.captchaToken.current.getValue();
-    const YOUR_PRIVATE_KEY = '6LeRwTsjAAAAAL6oIwYSxJON96x7krwJXBglqKpX'
-
-    // Call Google's API to get score
-    const res = await axios.post(
-      `https://www.google.com/recaptcha/api/siteverify?secret=${YOUR_PRIVATE_KEY}&response=${captchaToken}`
-    );
-
-    // Extract result from the API response
-    if (res.data.success) {
-      console.log('Valid');
-    } else {
-      console.log('Invalid');
-    }
-
-
-    this.setState({
-      isVerified: true
-    })
-  }
-
-
-
 
   render() {
     let session = JSON.parse(Cookies.get("session"))
@@ -256,19 +229,7 @@ class Summary extends React.Component {
           </div>
         </Container>
         <div>
-          {/**
-               * Shift the code to sign in page
-               */}
-          {/* <ReCAPTCHA
-                    className='center recaptchabtn'
-                    sitekey={'6LeRwTsjAAAAAIH41r4yFq5-bo3dheymEgp6XNuS'} 
-                    ref={this.captchaToken}
-                    onChange={()=>{this.recaptcha_fun()}}
-                    style={{ display: "inline-block",marginTop: '18em' }}
-                    size="invisible"
-              /> */}
           <Button type="primary" className='center nextbtn' style={{ marginTop: '22em' }} disabled={this.state.nextdisabled} onClick={() => this.submitHandle()}>Submit</Button>
-
         </div>
       </div>
     );

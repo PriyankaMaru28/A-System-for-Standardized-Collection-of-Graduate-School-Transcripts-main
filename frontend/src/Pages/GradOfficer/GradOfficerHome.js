@@ -62,7 +62,6 @@ class GradOfficerHome extends React.Component {
       let sort_score = _.filter(scores, (score, i) => {
         return ((scores[i].intakeTerm === term) && (parseInt(scores[i].intakeYear) === year))
       });
-      console.log("sort score..", sort_score)
 
       this.setState({
         sortedData: sort_score,

@@ -6,9 +6,11 @@
 .......
 -Export csv -  completed
 -Authentication - completed
+-Validation of the forms - completed
+-Edit and Save functionality - completed
 ...........
 Further developments
--Validation of the forms
 -Multiple transcripts, multple degrees, multiple work exp
 - Extending to other Faculties, grading schemes
+- New admin account in grad professor view
 https://online.mun.ca/d2l/home/348529

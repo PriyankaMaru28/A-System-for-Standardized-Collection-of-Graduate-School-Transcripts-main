@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Form } from "react-bootstrap";
 import { Redirect, Link } from "react-router-dom";
 import { Button } from "antd";
@@ -6,7 +6,7 @@ import "./login.css";
 import axios from "axios";
 import LoginLayout from "./LoginLayout";
 import Cookies from "js-cookie";
-
+import ReCAPTCHA from "react-google-recaptcha";
 
 function LoginPage() {
   document.title = "Login";
@@ -14,6 +14,8 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setError] = useState("");
+  const captchaRef = useRef(null);
+  const [isVerified, setIsVerified] = useState(true);
   
   const login = () => {
        
@@ -39,6 +41,31 @@ function LoginPage() {
      
      
   };
+
+  const recaptcha_fun = async () => {
+   // alert(`google recaptcha clicked ${this.captchaToken.current.getValue()}`)
+   
+    const YOUR_PRIVATE_KEY = '6LeRwTsjAAAAAL6oIwYSxJON96x7krwJXBglqKpX'
+
+    const token = captchaRef.current.getValue();
+    
+    // Call Google's API to get score
+    const res = await axios.post(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${YOUR_PRIVATE_KEY}&response=${token}`
+    );
+  
+    // Extract result from the API response
+    if (res.data.success) {
+      console.log('Valid');
+      setIsVerified(false)
+    // captchaRef.current.reset();
+    } else {
+      console.log('Invalid');
+    }
+  
+  
+  }
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       login();
@@ -79,11 +106,18 @@ function LoginPage() {
               Forgot your password?
             </Link>
           </Form.Group>
-          <Button type="primary" className={" signInBtn"} onClick={login}>
+          <ReCAPTCHA
+                    className='center'
+                    sitekey={'6LeRwTsjAAAAAIH41r4yFq5-bo3dheymEgp6XNuS'} 
+                    ref={captchaRef}
+                    onChange={recaptcha_fun}
+              />
+          <Button type="primary" className={"signInBtn"} disabled={isVerified} onClick={login}>
             Sign In
           </Button>
           
         </Form>
+        
         <div className="flex-30 caption mt-4 signuphere">
           Don't have an account?{" "}
           <Link to ='/signup'>
@@ -95,8 +129,6 @@ function LoginPage() {
     );
   }
   switch (screen) {
-  
-    
     case "Home": {
       return <Redirect to="/home" />;
     }

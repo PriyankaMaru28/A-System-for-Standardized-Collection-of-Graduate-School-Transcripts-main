@@ -55,7 +55,6 @@ router.post('/saveProgramDetail', (req, res) => {
         if (err) throw err;
         console.log("ept...", ept)
       })
-
       res.send({ 'applicationId': appID })
     })
 
@@ -144,8 +143,7 @@ router.post('/saveTranscriptDetails', (req, res) => {
   var uid = req.user.id;
 
   // Check if transcript id already exists if so update the details else insert the details.
-  console.log("-------ID DEGREE------", degreeID)
-  console.log("-------tDetailsE------",tDetails )
+
   var transSql = `Select idtranscript FROM transcript where idDegree = ?`
 
   con.query(transSql, [degreeID], function (err, transcript) {
@@ -166,31 +164,18 @@ router.post('/saveTranscriptDetails', (req, res) => {
         var gradingschemetableSql = 'select * from ??'
         con.query(gradingschemetableSql, tDetails.gradeType, function (err, table) {
           if (err) throw err;
-
-
           let cId = []
           var courseIdSQL = 'Select idcourse,courseID from course where transcriptid=?'
           con.query(courseIdSQL, transcriptID, function (err, ID) {
             if (err) throw err;
             cId = JSON.parse(JSON.stringify(ID))
-            
-
           })
-
-          console.log("CID...", cId)
-
-            console.log("merge with..", _.mergeWith(tDetails.courses, cId))
-
           tDetails.courses = _.mergeWith(tDetails.courses, cId)
-          console.log("courses", tDetails.courses)
-
           var score = 0, coursenum = 0;
           for (course of tDetails.courses) {
             coursenum += 1;
             var cDetails = course, gradee;
-            console.log("----CDETAILS----")
-            console.log(cDetails)
-            console.log("----------")
+        
             if (!isNaN(course.courseGrade)) { gradee = parseInt(course.courseGrade, 10); }
             else { gradee = course.courseGrade }
             console.log(gradee)
@@ -202,29 +187,13 @@ router.post('/saveTranscriptDetails', (req, res) => {
                 score += hm[row.USEquivalent]; break;
               }
             }
-            // console.log(score)
-            console.log("-------------------------------------")
-            console.log("C details...", cDetails)
-            console.log("-------------------------------------")
-            console.log("COURSE details...", course)
-            // if(!_.isEmpty(course.idcourse)){
+      
                   //updating the  grades of courses for that transcriptId
             var courseSql = 'Update course SET transcriptid=?,courseName=?,grade=?,coursedept=?,courseID=? where transcriptid=? and idcourse=?';
             var courseValues = [transcriptID, cDetails.courseName, cDetails.courseGrade, cDetails.courseFaculty, cDetails.courseID, transcriptID, course.idcourse];
             con.query(courseSql, courseValues, function (err) {
               if (err) throw err;
             })
-
-            // }else{
-            //       //inserting grades of courses
-            // var courseSql = 'insert into course(??,??,??,??,??) values(?,?,?,?,?)';
-            // var courseValues = ['transcriptid', 'courseName', 'grade', 'coursedept', 'courseID', transcriptID, cDetails.courseName,
-            //   cDetails.courseGrade, cDetails.courseFaculty, cDetails.courseID];
-            // con.query(courseSql, courseValues, function (err, course) {
-            //   if (err) throw err;
-            //   console.log("course...", course)
-            // })
-            // }
         
           }
           // update in the scores table for that applicationId
@@ -242,9 +211,7 @@ router.post('/saveTranscriptDetails', (req, res) => {
             res.send({ ok: 'ok', 'applicationId': appID, 'degreeId': degreeID, 'transcriptId': transcriptID })
           })
         })
-
       })
-
 
     } else {
 
@@ -378,109 +345,7 @@ router.post('/submitStudApplication', (req, res) => {
 
 })
 
-// Function called when application is submitted 
-// router.post('/submitStudApplication', function(req, res, next){
-//   var uid = req.user.id
-//   var pDetails = req.body.programDetails; var dDetails = req.body.degreeDetails;
-//   var tDetails = req.body.transcriptDetails;  var wDetails = req.body.workExpDetails;
-//     //insert application and program details
-//   var applicationSql = 'insert into application(??,??,??,??,??,??,??,??) values(?,?,?,?,?,?,?) ';
-//   var applicationValues = [  'uid', 'program', 'intakeYear', 'intakeTerm', 'EPTName', 'dept', 'route','applicationCompleted',
-//     uid, pDetails.program, pDetails.intake, pDetails.term, pDetails.ept, pDetails.dept, pDetails.route,'completed'];   
-
-//   con.query(applicationSql, applicationValues, function (err, app) {
-//     if (err) throw err;
-//     var appID = app.insertId
-
-//     var greSql = 'insert into grescore(applicationid, GreScore, analyticalWriting, quantitative, verbalReasoning) values(?,?,?,?,?)'
-//     var greValues = [appID,pDetails.overall,pDetails.analytical,pDetails.quantitative,pDetails.verbalReasoning]
-//     con.query(greSql, greValues, function (err, gre) {
-//       if(err) throw err;
-//     })
-
-//     var eptSql = 'insert into ept(applicationid, EPToverall, EPTlisten, EPTread, EPTwriting, EPTspeak) values(?,?,?,?,?,?)'
-//     var eptValues = [appID,pDetails.eptOverall,pDetails.eptListening,pDetails.eptReading,pDetails.eptWriting,pDetails.eptSpeaking ]
-//     con.query(eptSql, eptValues, function (err, ept) {
-//       if(err) throw err;
-//     })
-
-//     //insert work exp details
-//     var workSql = 'insert into work(??,??,??,??,??,??,??,??) values(?,?,?,?,?,?,?,?)';
-//     var workValues = ['applicationid', 'field', 'role', 'monthsofExperince', 'company', 'description', 'startDate', 'endDate',
-//                 appID,wDetails.workField,wDetails.role, wDetails.monthsOfExp, wDetails.companyName, wDetails.description,wDetails.workStart,wDetails.workEnd];
-//     con.query(workSql,workValues, function(err){
-//                   if (err) throw err;
-//     //insert degree and university details  
-//     var degreeSql = 'insert into degree(??,??,??,??,??,??,??,??,??,??,??,??,??) values(?,?,?,?,?,?,?,?,?,?,?,?,?) ';
-//     var degreeValues = [  'applicationid', 'universityName', 'country', 'uniRankWorld', 'startDate', 'endDate', 'uniRankCountry',
-//    'uniRankLink', 'otherRankWorld', 'otherRankCountry', 'otherRankLink', 'degreeLevel', 'program',
-//     appID,dDetails.uniName,dDetails.country, dDetails.uniRankWorld, dDetails.degreeStart, dDetails.degreeEnd,dDetails.uniRankCountry,
-//     dDetails.uniRankLink,dDetails.otherRankWorld,dDetails.otherRankCountry, dDetails.otherRankLink, dDetails.degreeLevel, dDetails.program ];
-
-//     con.query(degreeSql,degreeValues, function(err, degree){
-//       if (err) throw err;
-//       var degreeID = degree.insertId;
-//       //insert transcript details
-
-//       var transcriptSql = 'insert into transcript(??,??,??,??,??,??,??) values(?,?,?,?,?,?,?)';
-//       var transcriptValues = ['idDegree','universityName','country','gradeType','averageGrade','averageClassGrade','academicStanding',
-//       degreeID, tDetails.uniName,tDetails.country, tDetails.gradeType, tDetails.averageGrade,tDetails.averageClassGrade, tDetails.academicStanding]
-
-//       con.query(transcriptSql,transcriptValues, function(err, transcript){
-//         if (err) throw err;
-//         var transcriptID = transcript.insertId;
-
-//         //get gradingscheme table
-//         var gradingschemetableSql = 'select * from ??'
-//         con.query(gradingschemetableSql, tDetails.gradeType, function(err, table){
-//           if(err)  throw err;
-
-//         var score = 0,coursenum = 0;
-//         for(course of tDetails.courses){
-//           coursenum += 1;
-//           var cDetails = course, gradee;
-//           if(!isNaN(course.courseGrade)){gradee = parseInt(course.courseGrade, 10);}
-//           else{gradee = course.courseGrade}
-//           console.log(gradee)
-//           for(row of table){
-//             //console.log(row)
-//             //gradesof courses summation
-//             if((row.scale1_max >= gradee && gradee >= row.scale1_min)|| (row.scale2_max >= gradee && gradee >= row.scale2_min) || (row.gradeDescription == gradee)|| (row.degreeClassification == gradee))
-//             { 
-
-//               score += hm[row.USEquivalent];break;
-//             }
-//           }
-//           console.log(score)
-//           //inserting grades of courses
-//           var courseSql = 'insert into course(??,??,??,??,??) values(?,?,?,?,?)';
-//           var courseValues = ['transcriptid', 'courseName', 'grade', 'coursedept', 'courseID',transcriptID,cDetails.courseName,
-//                            cDetails.courseGrade,cDetails.courseFaculty,cDetails.courseID];
-//             con.query(courseSql,courseValues, function(err){
-//               if(err)  throw err;
-//             })
-//          }
-//          var avgScore = (score/coursenum),avgGrade;
-//          console.log(avgScore) 
-//          for(  i = 0; i < hmNum.length; i++){
-
-//           if (avgScore > hmNum[i]){ avgScore = hmNum[i];avgGrade = hmAlpha[i];break}
-//          }
-//          var  name = req.user.fname+" "+req.user.lname;
-//          var scoreSql = 'insert into scores(applicationid,score1,score2,uid,intakeYear,intakeTerm,userName,userEmail) values(?,?,?,?,?,?,?,?)';
-
-//          con.query(scoreSql,[appID,avgScore,avgGrade,uid,pDetails.intake,pDetails.term, name ,req.user.email], function(err,data){
-//            if(err) throw err;
-//            res.send({ok:'ok'})
-//          })
-//         })
-//       })
-//     })
-//   })
-//   });
-// });
-
-
+// Function to get the submitted app
 router.get('/getSubmittedApplication/:id', function (req, res) {
   console.log('into get submitted application ...')
   var uid = req.params.id, appDetails = { program: null, workExp: null, degree: null, transcript: null }

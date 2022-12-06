@@ -87,7 +87,7 @@ function SignupPage() {
               size="sm"
               type="number"
               value={sid}
-              placeholder="Srudent ID"
+              placeholder="Student ID"
               onChange={(e) => {
                 setSid(e.target.value);
               }}

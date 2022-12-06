@@ -117,9 +117,11 @@ class StudentHome extends React.Component {
 
 
   onSubmitHandle = () => {
+    
     setTimeout(() => {
       this.submitapp()
     }, 1000)
+    
 
   }
 
@@ -127,7 +129,11 @@ class StudentHome extends React.Component {
   submitapp = () => {
     axios.defaults.headers.common["Authorization"] = JSON.parse(Cookies.get("session")).token;
     axios.post('/submitStudApplication', this.state).then((response) => {
-      console.log("App Submitted", response)
+     
+      if(response.data.ok){
+        console.log("App Submitted", response)
+        sessionStorage.clear()
+      }
     })
   }
 
