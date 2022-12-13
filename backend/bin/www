@@ -39,7 +39,7 @@ if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port,()=>{
+server.listen(process.env.PORT || port,()=>{
   console.log(`Server is listening to  PORT NO : ${port}`)
 });
 server.on('error', onError);
