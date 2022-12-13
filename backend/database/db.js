@@ -1,4 +1,5 @@
 const mysql = require('mysql');
+require('dotenv').config();
 
 // First you need to create a connection to the database
 // Be sure to replace 'user' and 'password' with the correct values
@@ -46,7 +47,7 @@ const mysql = require('mysql');
 // }
 
 // handleDisconnect()
-
+console.log("DATABSE>>>", process.env.REACT_APP_DB_HOST)
 /**
  * Pool connection created for the 
  * so the server is continuously connected. - Heroku
@@ -55,10 +56,10 @@ var pool = mysql.createPool({
   connectionLimit : 100,
   waitForConnections : true,
   queueLimit :0,
-  host: 'us-cdbr-east-06.cleardb.net',
-  user: 'b200ab438d2977',
-  password: '40fa22c2',
-  database: 'heroku_4fb5d708e7d5485',
+  host: process.env.REACT_APP_DB_HOST,
+  user: process.env.REACT_APP_DB_USER,
+  password: process.env.REACT_APP_DB_PASSSWORD,
+  database: process.env.REACT_APP_DB_DATABASE,
   debug    :  true,
   wait_timeout : 28800,
   connect_timeout :10
