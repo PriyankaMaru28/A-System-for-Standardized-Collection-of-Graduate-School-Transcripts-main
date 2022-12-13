@@ -23,19 +23,19 @@ class App extends React.Component {
     this.state = {}
   }
 
-  
-
   render() {
     Cookies.set("loggedIn", {
       loggedIn: false
     });
-    axios.defaults.baseURL = 'http://localhost:1000';
+    //axios.defaults.baseURL = 'http://localhost:1000';
+    axios.defaults.baseURL = process.env.REACT_APP_BASEURL
+    // console.log("backend url ", process.env.REACT_APP_BASEURL)
     return (
       <div className="App">
        
           <Switch>
            
-            <Route exact path={'/'}   render={() => <LoginPage callBack={this.updateToken} />}  exact />
+            <Route exact path={'/'} render={() => <LoginPage callBack={this.updateToken} />}  exact />
             <Route exact path={'/logout'} component={Logout} exact />
             <Route exact path={'/home'} component={Home} />
             <Route exact path={'/gradRequests'} component={Requests} />

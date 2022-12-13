@@ -1,52 +1,101 @@
 var express = require('express');
 var router = express.Router();
-var con = require('../Database/db');
+var pool = require('../Database/db');
 const excel = require("exceljs");
 /* GET users listing. */
-
-
 router.get('/getStudentScores',function(req,res ){
     console.log("LL")
+
+  pool.getConnection(function (err, con) {
+    if (err) {
+      con.release();
+      console.log(' Error getting mysql_pool connection: ' + err);
+      throw err;
+    }
     var scoresSql = 'select * from scores';
     con.query(scoresSql, function(err,scoresList){
         if(err) throw err
+        console.log("scoresdata..", scoresList)
         res.send({scoreData:scoresList})
+      
     })
+   
+  })
+
 })
 
 router.post('/addEPT',function(req,res){
   let user = req.user, body = req.body;
   console.log(body)
-  let sql = 'insert into gradrequests(requestType, uid, userName, description, userEmail) values(?,?,?,?,?)'
-  let values = ['EPT',user.id,user.fname+' '+user.lname,body.description,user.email]
-  con.query(sql,values,function(err){
-      if(err) throw err;
-      res.send({ok:true})
-  })
-})
-router.post('/addGradingScheme',function(req,res){
-    let user = req.user, body = req.body;
-    console.log(body)
+  pool.getConnection(function (err, con) {
+    if (err) {
+      con.release();
+      console.log(' Error getting mysql_pool connection: ' + err);
+      throw err;
+    }
     let sql = 'insert into gradrequests(requestType, uid, userName, description, userEmail) values(?,?,?,?,?)'
-    let values = ['Grading scheme',user.id,user.fname+' '+user.lname,body.description,user.email]
+    let values = ['EPT',user.id,user.fname+' '+user.lname,body.description,user.email]
     con.query(sql,values,function(err){
         if(err) throw err;
         res.send({ok:true})
     })
+    con.release();
+  
+  })
+ 
+})
+
+
+router.post('/addGradingScheme',function(req,res){
+    let user = req.user, body = req.body;
+    console.log(body)
+    pool.getConnection(function (err, con) {
+      if (err) {
+        con.release();
+        console.log(' Error getting mysql_pool connection: ' + err);
+        throw err;
+      }
+      let sql = 'insert into gradrequests(requestType, uid, userName, description, userEmail) values(?,?,?,?,?)'
+      let values = ['Grading scheme',user.id,user.fname+' '+user.lname,body.description,user.email]
+      con.query(sql,values,function(err){
+          if(err) throw err;
+          res.send({ok:true})
+      })
+
+    con.release();
+    })
+
   })
 
 
 router.get('/getAdminRequests',function(req,res){
+
+  pool.getConnection(function (err, con) {
+    if (err) {
+      con.release();
+      console.log(' Error getting mysql_pool connection: ' + err);
+      throw err;
+    }
     let sql = 'select * from gradrequests';
     con.query(sql,function(err,gradrequests ){
         if(err) throw err;
         res.send({'gradrequests':gradrequests})
     })
+    con.release()
+  })
+    
 })
   
 
 router.get('/getExcel',function(req,res){
- 
+
+  pool.getConnection(function (err, con) {
+    if (err) {
+      con.release();
+      console.log(' Error getting mysql_pool connection: ' + err);
+      throw err;
+    }
+
     var scoresSql = 'select * from scores ORDER BY uid ASC';
     con.query(scoresSql, function(err,scoresList){
         if(err) throw err;
@@ -87,9 +136,10 @@ router.get('/getExcel',function(req,res){
       res.end();
       console.log("File write done........");
     })
-})  
+  })  
+  })
+  con.release();
+  })
 })
-})
-
 
 module.exports = router;

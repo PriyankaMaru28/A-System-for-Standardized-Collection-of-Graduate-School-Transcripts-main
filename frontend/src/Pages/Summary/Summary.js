@@ -68,9 +68,10 @@ class Summary extends React.Component {
   componentDidMount() {
     let session = JSON.parse(Cookies.get("session"))
     var user = session.user; var id;
+    var appID = sessionStorage.getItem('appId');
    
     axios.defaults.headers.common["Authorization"] = JSON.parse(Cookies.get("session")).token;
-    axios.get('/getSubmittedApplication/' + user.id).then((response) => {
+    axios.get('/getSubmittedApplication/' + appID).then((response) => {
     
       let workData = response.data.appDetails.workExp, transData = response.data.appDetails.transcript;
       let degreeData = response.data.appDetails.degree, programData = response.data.appDetails.program;
@@ -224,7 +225,6 @@ class Summary extends React.Component {
             }
 
             <div>
-
             </div>
           </div>
         </Container>

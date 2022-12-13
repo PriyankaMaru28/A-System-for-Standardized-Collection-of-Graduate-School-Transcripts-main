@@ -1,29 +1,58 @@
 var express = require('express');
 const { route } = require('./users');
-var con = require('../Database/db');
+var pool = require('../Database/db');
 var router = express.Router();
 var _ = require('lodash');
 
 const hm = { 'A+': 4.0, 'A': 4.0, 'A-': 3.7, 'B+': 3.3, 'B': 3.0, 'B-': 2.7, 'C+': 2.3, 'C': 2.0, 'C-': 1.7, 'D+': 1.3, 'D': 1.0, 'E': 0.0, 'F': 0.0 }
 const hmNum = [4.0, 4.0, 3.7, 3.3, 3.0, 2.7, 2.3, 2.0, 1.7, 1.3, 1.0, 0.0, 0.0]
 const hmAlpha = ['A+', 'A', "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "E"]
+
+// Added the below code for Server is closed error - Heroku
+// pool.getConnection(function (err, con) {
+//   if (err) {
+//     con.release();
+//     console.log(' Error getting mysql_pool connection: ' + err);
+//     throw err;
+//   }
+// })
+
 /* GET users listing. */
 
 router.get('/api/getGradingSchemes', function (req, res, next) {
+
+  pool.getConnection(function (err, con) {
+    if (err) {
+      con.release();
+      console.log('Error getting mysql_pool connection: ' + err);
+      throw err;
+    }
   sql = 'select * from gradingschemelist'
+  
   con.query(sql, function (err, gradingSchemelist) {
     if (err) throw err;
     res.send({ 
       gradingSchemelist: gradingSchemelist 
     });
   });
+  con.release()
+  })
 })
 
 router.get('/getUser/:id', function (req, res) {
-  let sql = 'select * from user where uid = ?';
-  con.query(sql, req.params.id, function (err, userProfile) {
-    if (err) throw err;
-    res.send({ userProfile: userProfile[0] })
+
+  pool.getConnection(function (err, con) {
+    if (err) {
+      con.release();
+      console.log(' Error getting mysql_pool connection: ' + err);
+      throw err;
+    }
+    let sql = 'select * from user where uid = ?';
+    con.query(sql, req.params.id, function (err, userProfile) {
+      if (err) throw err;
+      res.send({ userProfile: userProfile[0] })
+    })
+    con.release()
   })
 })
 
@@ -34,7 +63,14 @@ router.post('/saveProgramDetail', (req, res) => {
   var uid = req.user.id;
   var appId = req.body.appID;
 
-  // If applist has data then update the values else insert it 
+  pool.getConnection(function (err, con) {
+    if (err) {
+      con.release();
+      console.log(' Error getting mysql_pool connection: ' + err);
+      throw err;
+    }
+
+      // If applist has data then update the values else insert it 
   if (!_.isEmpty(appId)) {
     var appID = appId;
     var applicationSqlUpdate = 'Update application SET uid = ?,program = ?,intakeYear=?, intakeTerm=?, EPTName=?, dept=?, route=?, applicationCompleted=? where applicationid=?'
@@ -83,7 +119,8 @@ router.post('/saveProgramDetail', (req, res) => {
       res.send({ 'applicationId': appID })
     })
   }
-
+  con.release()
+  })
 
 })
 
@@ -93,7 +130,15 @@ router.post('/saveDegreeDetails', (req, res) => {
   console.log('degree details ', req.body);
   var dDetails = req.body;
   var appID = dDetails.appId;
-  // If there are any pending degree applications : 
+
+  pool.getConnection(function (err, con) {
+    if (err) {
+      con.release();
+      console.log(' Error getting mysql_pool connection: ' + err);
+      throw err;
+    }
+
+     // If there are any pending degree applications : 
   var degreeSql = `Select idDegree FROM degree where applicationid=?`;
   con.query(degreeSql, [appID], function (err, iddegree) {
     if (err) throw err
@@ -131,6 +176,9 @@ router.post('/saveDegreeDetails', (req, res) => {
       })
     }
 
+    con.release()
+  })
+  
   })
 
 })
@@ -141,6 +189,14 @@ router.post('/saveTranscriptDetails', (req, res) => {
   var degreeID = tDetails.degreeId;
   var appID = tDetails.appId;
   var uid = req.user.id;
+
+  pool.getConnection(function (err, con) {
+    if (err) {
+      con.release();
+      console.log(' Error getting mysql_pool connection: ' + err);
+      throw err;
+    }
+
 
   // Check if transcript id already exists if so update the details else insert the details.
 
@@ -170,11 +226,13 @@ router.post('/saveTranscriptDetails', (req, res) => {
             if (err) throw err;
             cId = JSON.parse(JSON.stringify(ID))
           })
-          tDetails.courses = _.mergeWith(tDetails.courses, cId)
+         tDetails.courses = _.mergeWith(tDetails.courses, cId)
           var score = 0, coursenum = 0;
           for (course of tDetails.courses) {
             coursenum += 1;
             var cDetails = course, gradee;
+            console.log("---CDETAILS----")
+            console.log(cDetails)
         
             if (!isNaN(course.courseGrade)) { gradee = parseInt(course.courseGrade, 10); }
             else { gradee = course.courseGrade }
@@ -198,10 +256,17 @@ router.post('/saveTranscriptDetails', (req, res) => {
           }
           // update in the scores table for that applicationId
           var avgScore = (score / coursenum), avgGrade;
+          debugger;
+          console.log("----------avgScore-------")
           console.log(avgScore)
+         
           for (i = 0; i < hmNum.length; i++) {
 
-            if (avgScore > hmNum[i]) { avgScore = hmNum[i]; avgGrade = hmAlpha[i]; break }
+            if (avgScore > hmNum[i]) { 
+              avgScore = hmNum[i]; avgGrade = hmAlpha[i]; 
+              console.log("----------avgGrade-------")
+              console.log(avgGrade)
+              break }
           }
           var name = req.user.fname + " " + req.user.lname;
           var scoreSql = 'update scores SET applicationid=?,score1=?,score2=?,uid=?,intakeYear=?,intakeTerm=?,userName=?,userEmail=? where applicationid=?';
@@ -232,29 +297,34 @@ router.post('/saveTranscriptDetails', (req, res) => {
           for (course of tDetails.courses) {
             coursenum += 1;
             var cDetails = course, gradee;
-            if (!isNaN(course.courseGrade)) { gradee = parseInt(course.courseGrade, 10); }
+            if (!isNaN(course.courseGrade)) {
+               gradee = parseInt(course.courseGrade, 10);
+               }
             else { gradee = course.courseGrade }
             console.log(gradee)
             for (row of table) {
-              //console.log(row)
               //gradesof courses summation
               if ((row.scale1_max >= gradee && gradee >= row.scale1_min) || (row.scale2_max >= gradee && gradee >= row.scale2_min) || (row.gradeDescription == gradee) || (row.degreeClassification == gradee)) {
 
                 score += hm[row.USEquivalent]; break;
               }
             }
-            console.log(score)
             //inserting grades of courses
             var courseSql = 'insert into course(??,??,??,??,??) values(?,?,?,?,?)';
             var courseValues = ['transcriptid', 'courseName', 'grade', 'coursedept', 'courseID', transcriptID, cDetails.courseName,
               cDetails.courseGrade, cDetails.courseFaculty, cDetails.courseID];
             con.query(courseSql, courseValues, function (err, course) {
               if (err) throw err;
-              console.log("course...", course)
+         
             })
           }
           var avgScore = (score / coursenum), avgGrade;
+          console.log('------AVG SCORE-------')
           console.log(avgScore)
+          console.log('------ SCORE-------')
+          console.log(score)
+          console.log('------ coursenum-------')
+          console.log(coursenum)
           for (i = 0; i < hmNum.length; i++) {
 
             if (avgScore > hmNum[i]) { avgScore = hmNum[i]; avgGrade = hmAlpha[i]; break }
@@ -272,9 +342,9 @@ router.post('/saveTranscriptDetails', (req, res) => {
     }
 
   })
-
-
-
+  con.release()
+  
+  })
 })
 
 // Save and continue the work details - page 4
@@ -285,7 +355,14 @@ router.post('/saveWorkDetails', (req, res) => {
   var degreeID = wDetails.degreeID;
   var transcriptID = wDetails.transcriptID;
 
-  // Check if the work details are already saved for that applicationid
+  pool.getConnection(function (err, con) {
+    if (err) {
+      con.release();
+      console.log(' Error getting mysql_pool connection: ' + err);
+      throw err;
+    }
+
+      // Check if the work details are already saved for that applicationid
   // if so update using the work id else insert a new row with a new work id
   var workSQl = `Select idWork FROM work where applicationid = ?`;
 
@@ -321,9 +398,9 @@ router.post('/saveWorkDetails', (req, res) => {
     }
   })
 
-
+  con.release();
+  })
 })
-
 
 
 // Function called when application is submitted 
@@ -336,29 +413,53 @@ router.post('/submitStudApplication', (req, res) => {
   var uid = req.user.id
   var appId = req.body.appId;
 
-  var applicationSqlUpdate = 'Update application SET applicationCompleted=? where applicationid=?';
-  con.query(applicationSqlUpdate, ['complete', appId], function (err, app) {
-    if (err) throw err;
-    console.log("inside submit ", app)
-    res.send({ ok: 'ok' })
+  pool.getConnection(function (err, con) {
+    if (err) {
+      con.release();
+      console.log(' Error getting mysql_pool connection: ' + err);
+      throw err;
+    }
+
+    var applicationSqlUpdate = 'Update application SET applicationCompleted=? where applicationid=?';
+    con.query(applicationSqlUpdate, ['complete', appId], function (err, app) {
+      if (err) throw err;
+      console.log("inside submit ", app)
+      res.send({ ok: 'ok' })
+    })
+
+    con.release()
+  
+  
   })
+
+ 
 
 })
 
 // Function to get the submitted app
 router.get('/getSubmittedApplication/:id', function (req, res) {
   console.log('into get submitted application ...')
-  var uid = req.params.id, appDetails = { program: null, workExp: null, degree: null, transcript: null }
-  console.log(uid)
-  var appSql = 'select * from application where uid = ?';
-  con.query(appSql, uid, function (err, pDetails) {
+  var applicationid = req.params.id, appDetails = { program: null, workExp: null, degree: null, transcript: null }
+  console.log(applicationid)
+
+  pool.getConnection(function (err, con) {
+    if (err) {
+      con.release();
+      console.log(' Error getting mysql_pool connection: ' + err);
+      throw err;
+    }
+
+
+  var appSql = 'select * from application where applicationid = ?';
+  con.query(appSql, applicationid, function (err, pDetails) {
     if (err) throw err;
     console.log(pDetails.length)
-    var latest = pDetails.length - 1;
-    appDetails.program = pDetails[latest];
-    console.log(pDetails[latest])
+    // var latest = pDetails.length - 1;
+    appDetails.program = pDetails[0];
+    console.log("-------pDetails---------")
+    console.log(pDetails)
     var greSql = 'select * from grescore where applicationid = ?';
-    con.query(greSql, pDetails[latest].applicationid, function (err, greDetails) {
+    con.query(greSql, applicationid, function (err, greDetails) {
       if (err) throw err;
       if (greDetails.length != 0) {
         greDetails = greDetails[0]
@@ -366,7 +467,7 @@ router.get('/getSubmittedApplication/:id', function (req, res) {
         appDetails.program['quantitative'] = greDetails.quantitative; appDetails.program['verbalReasoning'] = greDetails.verbalReasoning;
       }
       var eptSql = 'select * from ept where applicationid = ?'
-      con.query(eptSql, pDetails[latest].applicationid, function (err, eptDetails) {
+      con.query(eptSql, applicationid, function (err, eptDetails) {
         if (err) throw err;
         if (eptDetails.length != 0) {
           eptDetails = eptDetails[0];
@@ -375,11 +476,11 @@ router.get('/getSubmittedApplication/:id', function (req, res) {
           appDetails.program['eptReading'] = eptDetails.EPTread;
         }
         var workExpSql = 'select * from work where ?? = ? ';
-        con.query(workExpSql, ['applicationid', pDetails[latest].applicationid], function (err, wDetails) {
+        con.query(workExpSql, ['applicationid', applicationid], function (err, wDetails) {
           if (err) throw err;
           appDetails.workExp = wDetails[0];
           var degreeSql = 'select * from degree where ?? = ?';
-          con.query(degreeSql, ['applicationid', pDetails[latest].applicationid], function (err, dDetails) {
+          con.query(degreeSql, ['applicationid',applicationid], function (err, dDetails) {
             if (err) throw err;
             appDetails.degree = dDetails[0];
             console.log(dDetails)
@@ -403,6 +504,8 @@ router.get('/getSubmittedApplication/:id', function (req, res) {
         })
       })
     })
+  })
+  con.release()
   })
 })
 

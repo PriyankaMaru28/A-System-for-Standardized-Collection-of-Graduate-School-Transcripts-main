@@ -20,7 +20,7 @@ function AppLayout({children,header=''}){
         <div id ='navbardiv'>
         <Navbar   id = 'color-nav'>
     <Navbar.Brand>
-      <Link to ='/home'>
+      <Link to ='/home' onClick={ ()=>{sessionStorage.clear()}}>
       <img src={require("./images/icons/MUN_Logo.png").default}        
         className="d-inline-block align-top"
         alt="MUN logo"

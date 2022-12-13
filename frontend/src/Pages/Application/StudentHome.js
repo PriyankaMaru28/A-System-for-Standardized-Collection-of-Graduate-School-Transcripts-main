@@ -132,7 +132,7 @@ class StudentHome extends React.Component {
      
       if(response.data.ok){
         console.log("App Submitted", response)
-        sessionStorage.clear()
+        // sessionStorage.clear()
       }
     })
   }

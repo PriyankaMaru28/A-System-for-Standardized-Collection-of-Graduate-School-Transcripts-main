@@ -112,7 +112,7 @@ function LoginPage() {
                     ref={captchaRef}
                     onChange={recaptcha_fun}
               />
-          <Button type="primary" className={"signInBtn"} disabled={isVerified} onClick={login}>
+          <Button type="primary" className={"signInBtn"}  onClick={login}>
             Sign In
           </Button>
           

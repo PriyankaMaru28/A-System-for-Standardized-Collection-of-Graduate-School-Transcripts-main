@@ -20,7 +20,7 @@ const headers = [
 
 
 const columns = [
-  { title: 'Applicant ID', dataIndex: 'uid', key: 'uid', render: text => <Link to={`/profile/${text}`} >{text}</Link> },
+  { title: 'Applicant ID', dataIndex: 'applicationid', key: 'applicationid', render: text => <Link to={`/profile/${text}`} >{text}</Link> },
   { title: 'Applicant Name', dataIndex: 'userName', key: 'userName', },
   { title: 'Applicant Email', dataIndex: 'userEmail', key: 'userEmail', },
   { title: 'Numeric Academic Score', dataIndex: 'score1', key: 'score1', },
@@ -50,7 +50,6 @@ class GradOfficerHome extends React.Component {
       .then((response) => {
 
         var fileName = 'studentDetails.xlsx';
-
         var blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         FileSaver.saveAs(blob, fileName);
       });
@@ -92,7 +91,6 @@ class GradOfficerHome extends React.Component {
   render() {
     return (
       <AppLayout>
-
         <DropdownButton id="dropdown-item-button" title="Intake" size="sm">
           <Dropdown.Item as="button" onClick={() => this.getIntake('', '')}>Entire List</Dropdown.Item>
           <Dropdown.Item as="button" onClick={() => this.getIntake(2020, "Fall")}>Fall 2020</Dropdown.Item>
@@ -115,12 +113,10 @@ class GradOfficerHome extends React.Component {
           <Button size='2' className='secondary' style={{ float: 'right', padding: '5px' }} onClick={() => this.getExcel()}>
             <CloudDownloadOutlined style={{ float: 'right', padding: '5px' }} /></Button>
         </div>
-
         <Table columns={columns} dataSource={!_.isEmpty(this.state.sortedData) ? this.state.sortedData : this.state.scoreData} />
       </AppLayout>
     )
   }
-
 }
 
 export default GradOfficerHome;
