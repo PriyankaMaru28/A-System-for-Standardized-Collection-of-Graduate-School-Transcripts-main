@@ -1,1 +1,1 @@
-web:cd backend && nodemon ./bin/www
+web:nodemon index.js
