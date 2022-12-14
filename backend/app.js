@@ -22,9 +22,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-console.log("PATHS....", path.resolve(__dirname,'..','frontend','build','index.html'))
+
 // Serve static assests in production
 if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
+  console.log("PATHS....", path.resolve(__dirname,'..','frontend','build','index.html'))
   // set static folder
   app.use(express.static(__dirname+"../frontend/build"))
 
