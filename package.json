@@ -5,6 +5,7 @@
     "node": "16.16.0"
   },
   "scripts": {
+    "start": "node app.js",
     "server": "cd backend && nodemon ./bin/www",
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
