@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var pool = require('../Database/db');
+var pool = require('../database/db');
 const excel = require("exceljs");
 /* GET users listing. */
 router.get('/getStudentScores',function(req,res ){
