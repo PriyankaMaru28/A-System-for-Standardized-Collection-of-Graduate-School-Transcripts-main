@@ -1,12 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var pool = require('../Database/db');
+var pool = require('../database/db');
 const jwt = require("jsonwebtoken");
 const jwtSimple = require('jwt-simple')
 const jwt_secret = "munCsSecret";
 const crypto = require("crypto");
 const { emailsend } = require('../email/email');
-const { getConnection } = require('../Database/db');
 
 function generateToken(user) {
 
