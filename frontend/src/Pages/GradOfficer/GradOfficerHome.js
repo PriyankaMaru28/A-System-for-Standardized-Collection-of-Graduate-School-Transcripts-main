@@ -48,7 +48,6 @@ class GradOfficerHome extends React.Component {
       responseType: 'arraybuffer'
     })
       .then((response) => {
-
         var fileName = 'studentDetails.xlsx';
         var blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         FileSaver.saveAs(blob, fileName);
