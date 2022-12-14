@@ -25,6 +25,7 @@
     "react-scripts": "4.0.0",
     "react-select-country-list": "^2.2.1",
     "react-tooltip": "^4.2.11",
+    "serve": "^14.1.2",
     "url-loader": "^4.1.1",
     "web-vitals": "^0.2.4"
   },

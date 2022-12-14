@@ -2,7 +2,6 @@
   "name": "evaluation",
   "version": "1.0.0",
   "private":true,
-  "homepage":"/build",
   "engines": {
     "node": "16.16.0"
   },
