@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Serve static assests in production
 if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
-  console.log("PATHS....", path.resolve(__dirname,'..','frontend','build','index.html'))
+  console.log("PATHS....", path.resolve(__dirname,'..','frontend','build','index.html'), '...express static',__dirname+"../frontend/build")
   // set static folder
   app.use(express.static(__dirname+"../frontend/build"))
 
