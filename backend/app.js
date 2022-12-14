@@ -26,7 +26,7 @@ console.log("PATHS....", path.resolve(__dirname,'..','frontend','build','index.h
 // Serve static assests in production
 if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
   // set static folder
-  app.use(path.join(express.static(__dirname,'frontend','build')));
+ // app.use(path.join(express.static(__dirname+'frontend','build')));
 
   app.get('*',(req,res)=>
    {
