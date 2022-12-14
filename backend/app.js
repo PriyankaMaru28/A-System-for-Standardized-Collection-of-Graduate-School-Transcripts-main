@@ -26,19 +26,21 @@ console.log("PATHS....", path.resolve(__dirname,'..','frontend','build','index.h
 // Serve static assests in production
 if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
   // set static folder
-  app.use(express.static('frontend/build'));
+  //app.use(express.static('frontend/build'));
 
   app.get('*',(req,res)=>
    {
     res.sendFile(path.resolve(__dirname,'..','frontend','build','index.html'))
   })
 
+}else {
+  app.use('/', indexRouter);
+  app.use('/', usersRouter);
+  app.use('/',studentRouter);
+  
 }
 
 
-app.use('/', indexRouter);
-app.use('/', usersRouter);
-app.use('/',studentRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
