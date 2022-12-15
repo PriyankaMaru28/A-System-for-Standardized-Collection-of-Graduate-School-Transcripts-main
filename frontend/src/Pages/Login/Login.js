@@ -45,7 +45,7 @@ function LoginPage() {
   const recaptcha_fun = async () => {
    // alert(`google recaptcha clicked ${this.captchaToken.current.getValue()}`)
    
-    const YOUR_PRIVATE_KEY = '6LeRwTsjAAAAAL6oIwYSxJON96x7krwJXBglqKpX'
+    const YOUR_PRIVATE_KEY = '6LdJS4IjAAAAALyMz6YFVkkN-gmnKZJ-awj557LL'
 
     const token = captchaRef.current.getValue();
     
