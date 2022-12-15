@@ -30,6 +30,8 @@ router.get('/api/getGradingSchemes', function (req, res, next) {
   sql = 'select * from gradingschemelist'
   
   con.query(sql, function (err, gradingSchemelist) {
+    console.log("grading scheme..")
+    console.log(gradingSchemelist)
     if (err) throw err;
     res.send({ 
       gradingSchemelist: gradingSchemelist 

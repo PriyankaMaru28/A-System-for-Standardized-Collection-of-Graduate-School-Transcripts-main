@@ -161,6 +161,7 @@ class Transcript extends React.Component {
   }
 
   componentDidMount = () => {
+    axios.defaults.headers.common["Authorization"] = JSON.parse(Cookies.get("session")).token;
     axios.get('/api/getGradingSchemes').then((response) => {
       this.setState({ gradingSchemes: response.data.gradingSchemelist });
     });
@@ -196,7 +197,7 @@ class Transcript extends React.Component {
                   <Form.Control as="select" className="mr-sm-2" id="inlineFormCustomSelect" custom value={this.state.gradeType}
                     onChange={e => this.setState({ gradeType: e.target.value })}>
                     <option value='0' >Choose Type</option>
-                    {this.state.gradingSchemes.map((scheme) =>
+                    {this.state.gradingSchemes && this.state.gradingSchemes.map((scheme) =>
                       <option value={scheme.gradingSchemeTable} >{scheme.schemName}</option>
                     )}
                     <option value='Other' >Other</option>
