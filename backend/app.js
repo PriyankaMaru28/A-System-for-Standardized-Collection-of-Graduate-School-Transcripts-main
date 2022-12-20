@@ -34,16 +34,11 @@ if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
     res.sendFile(path.resolve(__dirname,'..','frontend','build','index.html'))
   })
 
-}else{
+}
 
   app.use('/', require('./routes/index'));
   app.use('/', require('./routes/users'));
   app.use('/',require('./routes/student'));
-}
-  
-
-
-
 
 
 // catch 404 and forward to error handler
