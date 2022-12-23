@@ -19,7 +19,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.resolve(__dirname,'..','frontend','public')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
@@ -38,9 +38,9 @@ if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
 
 }
 
-  app.use('/', indexRouter);
-  app.use('/', usersRouter);
-  app.use('/',studentRouter);
+  app.use('/', require('./routes/index'));
+  app.use('/', require('./routes/users'));
+  app.use('/',require('./routes/student'));
 
 
 // catch 404 and forward to error handler
