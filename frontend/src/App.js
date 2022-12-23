@@ -27,9 +27,9 @@ class App extends React.Component {
     Cookies.set("loggedIn", {
       loggedIn: false
     });
-    //axios.defaults.baseURL = 'http://localhost:1000';
+    axios.defaults.baseURL = process.env.REACT_APP_BASEURL;
     const loc = window.location;
-    axios.defaults.baseURL = `${loc.protocol}//${loc.hostname}${loc.hostname=== 'localhost' ? ':1000' : process.env.BASE_URL}`;
+  //  axios.defaults.baseURL = `${loc.protocol}//${loc.hostname}${loc.hostname=== 'localhost' ? ':1000' : process.env.BASE_URL}`;
 
     //axios.defaults.baseURL = process.env.REACT_APP_BASEURL
     // console.log("backend url ", process.env.REACT_APP_BASEURL)
