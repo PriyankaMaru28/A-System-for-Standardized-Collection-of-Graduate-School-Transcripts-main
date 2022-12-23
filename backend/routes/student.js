@@ -23,7 +23,6 @@ router.get('/getGradingSchemes', function (req, res, next) {
 
   pool.getConnection(function (err, con) {
     if (err) {
-      con.release();
       console.log('Error getting mysql_pool connection: ' + err);
       throw err;
     }
@@ -36,16 +35,15 @@ router.get('/getGradingSchemes', function (req, res, next) {
     res.send({ 
       gradingSchemelist: gradingSchemelist 
     });
-  });
-  con.release()
   })
+  con.release()
+  });
 })
 
 router.get('/getUser/:id', function (req, res) {
 
   pool.getConnection(function (err, con) {
     if (err) {
-      con.release();
       console.log(' Error getting mysql_pool connection: ' + err);
       throw err;
     }
