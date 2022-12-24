@@ -32,8 +32,6 @@ router.get('/getGradingSchemes', function (req, res, next) {
     console.log("grading scheme..")
     console.log(gradingSchemelist)
     if (err) throw err;
-    res.setHeader('Content-Type','application/json');
-    res.setHeader('Accept','application/json');
     res.send({ 
       gradingSchemelist: gradingSchemelist 
     });
@@ -52,8 +50,6 @@ router.get('/getUser/:id', function (req, res) {
     let sql = 'select * from user where uid = ?';
     con.query(sql, req.params.id, function (err, userProfile) {
       if (err) throw err;
-      res.setHeader('Content-Type','application/json');
-      res.setHeader('Accept','application/json');
       res.send({ userProfile: userProfile[0] })
     })
     con.release()
@@ -501,8 +497,7 @@ router.get('/getSubmittedApplication/:id', function (req, res) {
                 }
                 appDetails.transcript = tDetails[0];
                 console.log(appDetails)
-                res.setHeader('Content-Type','application/json');
-                res.setHeader('Accept','application/json');
+               
                 res.send({ appDetails: appDetails })
               })
             })
