@@ -22,10 +22,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(function(req, res, next) {
-  res.setHeader('Content-Type','application/json');
-  res.setHeader('Accept','application/json');
-});
 
 
 
@@ -41,6 +37,12 @@ if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
     console.log('req... ',req)
     res.sendFile(path.join(__dirname,'..','frontend','build','index.html'))
   })
+
+
+    app.use(function(req, res, next) {
+      res.setHeader('Content-Type','application/json');
+      res.setHeader('Accept','application/json');
+    });
 
 }
 
