@@ -162,8 +162,6 @@ class Transcript extends React.Component {
 
   componentDidMount = () => {
     axios.defaults.headers.common["Authorization"] = JSON.parse(Cookies.get("session")).token;
-    axios.defaults.headers.common["Accept"] = 'application/json';
-    axios.defaults.headers.common["Content-Type"] = 'application/json'
 
     axios.get('/getGradingSchemes').then((response) => {
       this.setState({ gradingSchemes: response.data.gradingSchemelist });

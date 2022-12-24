@@ -148,6 +148,8 @@ router.get('/auth/resetPassword/:id/:token', function (req, res, next) {
         res.send({ 'authenticated': true, id: payload.id })
       }
       else {
+        res.setHeader('Content-Type','application/json');
+        res.setHeader('Accept','application/json');
         res.send({ 'authenticated': false, id: payload.id })
       }
     

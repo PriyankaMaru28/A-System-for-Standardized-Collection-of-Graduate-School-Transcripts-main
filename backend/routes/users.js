@@ -16,6 +16,8 @@ router.get('/getStudentScores',function(req,res ){
     con.query(scoresSql, function(err,scoresList){
         if(err) throw err
         console.log("scoresdata..", scoresList)
+        res.setHeader('Content-Type','application/json');
+        res.setHeader('Accept','application/json');
         res.send({scoreData:scoresList})
       
     })
@@ -79,6 +81,8 @@ router.get('/getAdminRequests',function(req,res){
     let sql = 'select * from gradrequests';
     con.query(sql,function(err,gradrequests ){
         if(err) throw err;
+        res.setHeader('Content-Type','application/json');
+        res.setHeader('Accept','application/json');
         res.send({'gradrequests':gradrequests})
     })
     con.release()
