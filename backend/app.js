@@ -22,6 +22,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(function(req, res, next) {
+  res.setHeader("Content-Type", "application/json");
+  res.setHeader("Accept", "application/json");
+  next();
+});
+
+
 
 // Serve static assests in production
 if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
@@ -38,14 +45,10 @@ if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
 
 }
 
-  app.use(function(req, res, next) {
-    res.setHeader("Content-Type", "application/json");
-    next();
-  });
-
   app.use('/', require('./routes/index'));
   app.use('/', require('./routes/users'));
   app.use('/',require('./routes/student'));
+
 
 
 // catch 404 and forward to error handler
