@@ -38,13 +38,14 @@ if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
     res.sendFile(path.join(__dirname,'..','frontend','build','index.html'))
   })
 
-
-    app.use(function(req, res, next) {
-      res.setHeader('Content-Type','application/json');
-      res.setHeader('Accept','application/json');
-    });
-
 }
+
+
+app.use(function(req, res, next) {
+  res.setHeader('Content-Type','application/json');
+  res.setHeader('Accept','application/json');
+  next();
+});
 
   app.use('/', require('./routes/index'));
   app.use('/', require('./routes/users'));

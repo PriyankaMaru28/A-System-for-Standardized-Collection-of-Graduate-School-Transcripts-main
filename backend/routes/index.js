@@ -32,7 +32,7 @@ router.all("/*", function (req, res, next) {
     var tokenn = req.headers['authorization'];
     jwt.verify(tokenn, jwt_secret, (err, user) => {
       if (err) {
-        return res.send({ ok: false, action: "Session_Expired" });
+        return res.send({ ok: false, action: `Session Expired.. ${err.message}` });
       }
       else {
         req.user = user;
