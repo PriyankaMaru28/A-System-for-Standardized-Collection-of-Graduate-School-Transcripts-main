@@ -19,7 +19,7 @@ const hmAlpha = ['A+', 'A', "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "
 
 /* GET users listing. */
 
-router.get('/getGradingSchemes', function (req, res, next) {
+router.get('/api/getGradingSchemes', function (req, res, next) {
 
   pool.getConnection(function (err, con) {
     if (err) {
