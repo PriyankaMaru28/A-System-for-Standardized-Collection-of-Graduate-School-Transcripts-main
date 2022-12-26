@@ -3,7 +3,7 @@ var router = express.Router();
 var pool = require('../database/db');
 const excel = require("exceljs");
 /* GET users listing. */
-router.post('/getStudentScores',function(req,res ){
+router.get('/getStudentScores',function(req,res ){
     console.log("LL")
 
   pool.getConnection(function (err, con) {
