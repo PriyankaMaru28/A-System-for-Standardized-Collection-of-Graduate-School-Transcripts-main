@@ -77,7 +77,7 @@ class GradOfficerHome extends React.Component {
 
   componentDidMount() {
     axios.defaults.headers.common["Authorization"] = JSON.parse(Cookies.get("session")).token;
-    axios.get('/getStudentScores').then((response) => {
+    axios.post('/getStudentScores').then((response) => {
       console.log("response...")
       console.log(response.data.scoreData)
       this.setState({
