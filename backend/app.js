@@ -30,19 +30,19 @@ if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
   // set static folder
   app.use(express.static(path.resolve(__dirname,'..','frontend','build')))
 
-  app.get('*',(req,res)=>
+  app.get('/*',(req,res)=>
    {
     console.log("GET REQUEST CALLLED...")
     console.log('req... ',req)
-    res.sendFile(path.join(__dirname,'..','frontend','build','index.html'))
+    res.sendFile(path.resolve(__dirname,'..','frontend','build','index.html'))
   })
 
 }
 
 
-  app.use('/', require('./routes/index'));
-  app.use('/', require('./routes/users'));
-  app.use('/',require('./routes/student'));
+  app.use(indexRouter);
+  app.use(usersRouter);
+  app.use(studentRouter);
 
 
 
