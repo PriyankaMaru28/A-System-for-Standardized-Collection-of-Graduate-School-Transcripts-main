@@ -11,9 +11,9 @@ var cors = require('cors');
 
 var app = express();
 
-// view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'pug');
+//view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 app.use(cors())
 app.use(logger('dev'));
 app.use(express.json());
@@ -30,7 +30,7 @@ if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
   // set static folder
   app.use(express.static(path.resolve(__dirname,'..','frontend','build')))
 
-  app.get('/*',(req,res)=>
+  app.get('/.*/',(req,res)=>
    {
     console.log("GET REQUEST CALLLED...")
     console.log('req... ',req)
@@ -39,12 +39,9 @@ if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'){
 
 }
 
-
   app.use(indexRouter);
   app.use(usersRouter);
   app.use(studentRouter);
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
