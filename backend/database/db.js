@@ -47,7 +47,7 @@ require('dotenv').config();
 // }
 
 // handleDisconnect()
-console.log("DATABSE>>>", process.env.REACT_APP_DB_HOST)
+console.log("DATABASE>>>", process.env.REACT_APP_DB_HOST)
 /**
  * Pool connection created for the 
  * so the server is continuously connected. - Heroku
