@@ -7,6 +7,7 @@ import axios from "axios";
 import LoginLayout from "./LoginLayout";
 import Cookies from "js-cookie";
 import ReCAPTCHA from "react-google-recaptcha";
+import { CodepenOutlined, ConsoleSqlOutlined } from "@ant-design/icons";
 
 function LoginPage() {
   document.title = "Login";
@@ -16,6 +17,10 @@ function LoginPage() {
   const [errorMessage, setError] = useState("");
   const captchaRef = useRef(null);
   const [isVerified, setIsVerified] = useState(true);
+
+  const YOUR_PRIVATE_SITE_KEY= process.env.REACT_APP_YOUR_PRIVATE_SITE_KEY;
+
+
   
   const login = () => {
        
@@ -44,14 +49,12 @@ function LoginPage() {
 
   const recaptcha_fun = async () => {
    // alert(`google recaptcha clicked ${this.captchaToken.current.getValue()}`)
-   
-    const YOUR_PRIVATE_KEY = process.env.REACT_APP_YOUR_PRIVATE_KEY;
-
+   const YOUR_PRIVATE_SECRET_KEY = '6LfsKrwjAAAAAD_AweXeLHAghjJQ1n3oVl_JzewU';
     const token = captchaRef.current.getValue();
     
     // Call Google's API to get score
     const res = await axios.post(
-      `https://www.google.com/recaptcha/api/siteverify?secret=${YOUR_PRIVATE_KEY}&response=${token}`
+      `https://www.google.com/recaptcha/api/siteverify?secret=${YOUR_PRIVATE_SECRET_KEY}&response=${token}`
     );
   
     // Extract result from the API response
@@ -106,12 +109,12 @@ function LoginPage() {
               Forgot your password?
             </Link>
           </Form.Group>
-          <ReCAPTCHA
+          {/* <ReCAPTCHA
                     className='center'
-                    sitekey={'6LeRwTsjAAAAAIH41r4yFq5-bo3dheymEgp6XNuS'} 
+                    sitekey={'6LfsKrwjAAAAAGN64_omnW30szP3OP7pEC6oCBr1'} 
                     ref={captchaRef}
                     onChange={recaptcha_fun}
-              />
+              /> */}
           <Button type="primary" className={"signInBtn"}  onClick={login}>
             Sign In
           </Button>
