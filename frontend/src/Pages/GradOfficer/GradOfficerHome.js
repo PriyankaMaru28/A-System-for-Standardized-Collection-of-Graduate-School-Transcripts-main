@@ -108,7 +108,7 @@ class GradOfficerHome extends React.Component {
           : <span>The entire list is displayed</span>
         }
         <div style={{ display: 'inline' }}>
-          <a href='/gradRequests'> <ToolOutlined style={{ float: 'right', padding: '5px' }} /></a>
+          <Link to='/gradRequests'> <ToolOutlined style={{ float: 'right', padding: '5px' }} /></Link>
           <Button size='2' className='secondary' style={{ float: 'right', padding: '5px' }} onClick={() => this.getExcel()}>
             <CloudDownloadOutlined style={{ float: 'right', padding: '5px' }} /></Button>
         </div>
