@@ -115,9 +115,10 @@ router.get('/getExcel',function(req,res){
         { label: "Numeric Score", key: "score1" }, { label: "Grade", key: "score2" },
        { label: "Intake Term", key: "intakeTerm" } ,{ label: "Intake Year", key: "intakeYear" }
       ];
-      worksheet2.columns =  [{ label: "Applicantion ID", key: "uid" },{ label: "Applicant Name", key: "userName" },
-                    { label: "Course ID", key: "courseID" },{ label: "Course Name", key: "courseName" },
-                    { label: "Faculty", key: "coursedept" },{ label: "Course Grade", key: "grade" }
+      worksheet2.columns =  [
+       //   { label: "Applicantion ID", key: "uid" },{ label: "Applicant Name", key: "userName" },
+          { label: "Course ID", key: "courseID" },{ label: "Course Name", key: "courseName" },
+          { label: "Faculty", key: "coursedept" },{ label: "Course Grade", key: "grade" }
     ]
     // Add Array Rows
     worksheet1.getRow(1).values = ['User ID','Applicant ID', 'Applicant Name', 'Applicant Email', 'Numeric Score',"Grade","Intake Term","Intake Year"];
