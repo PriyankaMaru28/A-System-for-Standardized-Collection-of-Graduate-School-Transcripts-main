@@ -182,7 +182,7 @@ class Profile extends React.Component {
                         <span className = 'dataHeading'>Field:</span> <span className = 'data'>{app.workExpDetails.field}</span>&nbsp; &nbsp;
                         <span className = 'dataHeading'>Role:</span> <span className = 'data'>{app.workExpDetails.role}</span>
                         <br/>
-                        <span className = 'dataHeading'>Months of Experince:</span> <span className = 'data'>{app.workExpDetails.monthsOfExp}</span>&nbsp; &nbsp;
+                        <span className = 'dataHeading'>Months of Experience:</span> <span className = 'data'>{app.workExpDetails.monthsOfExp}</span>&nbsp; &nbsp;
                         <span className = 'dataHeading'>From:</span> <span className = 'data'>{app.workExpDetails.workStart}</span>&nbsp; &nbsp;
                         <span className = 'dataHeading'>To:</span> <span className = 'data'>{app.workExpDetails.workEnd}</span>
                         <br/>
