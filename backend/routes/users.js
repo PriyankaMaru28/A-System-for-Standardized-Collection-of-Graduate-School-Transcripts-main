@@ -123,7 +123,9 @@ router.get('/getExcel',function(req,res){
     // Add Array Rows
     worksheet1.getRow(1).values = ['User ID','Applicant ID', 'Applicant Name', 'Applicant Email', 'Numeric Score',"Grade","Intake Term","Intake Year"];
     worksheet1.addRows(scoresArr);
-    worksheet2.getRow(1).values = ['Applicant ID', 'Applicant Name', 'Course ID', 'Course Name',"Faculty","Course Grade"];
+    // TODO : commented because application id and name column  was vacant
+    //  worksheet2.getRow(1).values = ['Applicant ID', 'Applicant Name', 'Course ID', 'Course Name',"Faculty","Course Grade"];
+    worksheet2.getRow(1).values = ['Course ID', 'Course Name',"Faculty","Course Grade"];
     worksheet2.addRows(coursesArr);
     res.setHeader(
       "Content-Type",
